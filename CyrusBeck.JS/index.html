@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+    <head>
+        <title>Algoritmo de recorte de linhas de Cyrus-Beck</title>
+        <meta charset="utf-8">
+        
+        <!-- JQuery e JQueryUI from CDN. See: https://code.jquery.com/ -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+                crossorigin="anonymous">
+        </script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>        
+
+        <!-- JSGrid from CDN. See: http://js-grid.com/getting-started/ -->
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+
+        <!-- Default CSS -->
+        <link type="text/css" rel="stylesheet" href="css/default.css" />
+
+        <!-- Implementação do algoritmo de recorte de Cyrus-Beck -->
+        <script src="js/cyrusbeck.js"></script>
+        <!-- Scripts auxiliares -->
+        <script src="js/cg.js"></script>
+        <script src="js/input.js"></script>
+        <script src="js/helpers.js"></script>
+
+        <!-- Script de inicialização da página -->
+        <script>
+            // Inicialização JQueryUI 
+            $( function() 
+            {
+                var tooltips = $( "[title]" ).tooltip({
+                    position: {
+                        my: "left top",
+                        at: "right+5 top-5",
+                        collision: "none"
+                    }
+                });
+                $( "button" ).button();
+            
+                $( "#inLines" ).keydown(function (e)           /* or keyup  */
+                {
+                    if (e.keyCode == 13) // 27=esc
+                        $( e.ctrlKey ? "#clip" : "#submit").click();
+                });                
+            } );
+            // Inicialização pós-carregamento.
+            $( document ).ready(function() {
+                initInput();                // inicializa o datagrid de entrada.
+                CYRUSBECK.init();           // inicializa ambiente CYRUSBECK.
+            });
+        </script>
+    </head>
+    <body>
+        <!-- Cabeçalho/título da página -->
+        <div id="pageHeader">
+            Universidade de Fortaleza - UNIFOR. Programa de Pós-Graduação em Informática Aplicada. <br />
+            Trabalho #1 de CG (2017.1) - Algoritmo de Cyrus-Beck. Por Jonas Luz Jr.
+        </div>
+
+        <!-- Caixa de campos de entrada. -->
+        <div id="inputBox">
+            <p><label for="inLines">Número de linhas:</label>
+                <input id="inLines" type="number" value=10 
+                    title="O número de linhas aleatórias a serem geradas." />
+            </p>
+            <div id="jsGrid"></div><hr />
+            <button id="submit" class="ui-button ui-widget ui-corner-all" 
+                onclick="draw()">Desenhar</button>
+            <button id="clip" class="ui-button ui-widget ui-corner-all" 
+                onclick="clip()">Recortar</button>
+        </div>
+        <canvas id="canvas" width="800" height="600"></canvas>
+    </body>
+</html>
