@@ -2,7 +2,7 @@
  * splines.js **
  * Funções de desenho da spline.
  * Por Jonas Luz Jr. 
- * 
+ * Baseado em https://github.com/kuckir/CSPL.js
  */
 
 /** Namespace SPLINE */

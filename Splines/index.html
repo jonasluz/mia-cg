@@ -1,15 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt_BR">
     <head>
         <title>Spline Interpolation</title>
+        <meta charset="utf-8">
+
+        <!-- Default CSS -->
+        <link type="text/css" rel="stylesheet" href="css/default.css" />
+
+        <!-- Scripts -->        
         <script src="js/spline.js"></script> 
-        <script src="js/test.js"></script>
+        <script src="js/input.js"></script> 
         <script>
-            let onLoad = () => { runTest(); }
+            let onLoad = () => { INPUT.init(); }
         </script> 
     </head>
 
     <body onload="onLoad()">
-        <canvas id="theCanvas" width="300" height="225"></canvas>
+        <!-- Cabeçalho/título da página -->
+        <div id="pageHeader">
+            Universidade de Fortaleza - UNIFOR. Programa de Pós-Graduação em Informática Aplicada. <br />
+            Trabalho #4 de CG (2017.1) - Desenho de splines. Por Jonas Luz Jr.
+        </div>
+        <!-- Menu --> 
+        <div id="menu">
+            <button onclick="location.reload();">Reiniciar</button>
+        </div>
+
+        <!-- O Canvas -->
+        <canvas id="theCanvas" width="800" height="600"></canvas>
     </body>
 </html>

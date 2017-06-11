@@ -1,0 +1,27 @@
+#pageHeader {
+    position: absolute;
+    left: 1em; top: 0;
+    width: 95%; height: 3em;
+    border: 2px dashed blue;
+    text-align: center; vertical-align: middle;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px; font-weight: bold; color: darkblue; 
+    background: lightslategray;
+}
+
+#menu {
+    position: absolute;
+    left: 1em; top: 4em;
+    width: 95%; height: 2em;
+    border: 2px dashed blue;
+    text-align: right; vertical-align: middle;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px; font-weight: bold; color: darkblue; 
+    background: lightsteelblue;
+}
+
+canvas {
+    position: absolute;
+    left: 1em; top: 5em;
+    border: 3px dashed mediumblue;
+}
