@@ -3,19 +3,19 @@
  * @author Jonas de A Luz Jr. <unifor@jonasluz.com>
  */
 
-var vertices = [
+var INPUT = INPUT || {}
+
+INPUT.vertices = [
     /* Dados de testes */
-    {x: 30, y: 40}, {x: 130, y: 430},
-    {x: 276, y: 520}, {x: 470, y: 330},
+    {x: 100, y:100}, {x: 100, y: 500}, {x: 130, y: 530}, {x: 760, y: 420}, 
+    {x: 250, y:350}, {x: 470, y: 100}, //{x: 200, y: 200},
     /* */
 ];
 
-var cp, rl;
-
 /**
- * Inicializa o JSGrid
+ * Inicializa a entrada.
  */
-initInput = function() 
+INPUT.init = () => 
 {
     $("#jsGrid").jsGrid({
         width       : "100%",
@@ -26,7 +26,7 @@ initInput = function()
         sorting     : true,
         paging      : true,
 
-        data: vertices,
+        data: INPUT.vertices,
 
         fields      : [
             { name: "x", type: "number", width: 20, validate: "required" },
@@ -39,35 +39,32 @@ initInput = function()
 /**
  * Converte entrada e chama a rotina de desenho.
  */
-draw = function() 
+INPUT.draw = () => 
 {
     // Valida entrada. Polígono precisa de, pelo menos, três vértices.
-    if (vertices.length < 3) 
-    {
+    if (INPUT.vertices.length < 3) {
         alert("O plano de recorte deve ter pelo menos três vértices para ser um polígono!");
         return;
     }
 
     // Converte os vértices informados na datagrid em um vetor de pontos para o ClippingPlane.
-    var points = [];
-    vertices.forEach(function(point) 
-    {
+    let points = [];
+    for (let point of INPUT.vertices) {
         points.push(new CG.Point(point.x, point.y));
-    }, this);
+    }
 
     // Faz o desenho do plano de recorte.
     cp = new CYRUSBECK.ClippingPlane(points);
     cp.draw(true);
     
    // Cria e desenha as linhas aleatórias.
-   var n = $("#inLines")[0].value;
+   let n = $("#inLines")[0].value;
    rl = new CYRUSBECK.RandomLines(n);
    rl.draw(); 
-
 }
 
-clip = function() 
+INPUT.clip = function() 
 {
     // Recorta as linhas aleatórias criadas.
     CYRUSBECK.clipAndDraw(cp, rl.lines);
-}
+}   

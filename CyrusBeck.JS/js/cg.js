@@ -10,10 +10,30 @@ var CG = CG || {}
  * @param {Number} x Coordenada x.
  * @param {Number} y Coordenada y.
  */
-CG.Point = function(x, y) 
+CG.Point = function(x, y=undefined, z=0) 
 {
-    this.x = x; 
-    this.y = y;
+    if (y===undefined) 
+    {
+        if (Array.isArray(x) && x.length > 1)
+        {
+            this.x = x[0];
+            this.y = x[1];
+            this.z = x.length > 2 ? x[2] : 0;
+        } else {
+            console.error(`Can't create a CG.Point with ${x.length} elements.`);
+        }
+    } else {
+        this.x = x; 
+        this.y = y;
+        this.z = z;
+    }
+
+    CG.Point.prototype.toString = function() 
+    {
+        return `(${this.x}, ${this.y}, ${this.z})`;
+    }
+
+    this.toArray = () => [this.x, this.y, this.z];
 
     /**
      * Normaliza esse ponto/vetor.
@@ -22,8 +42,8 @@ CG.Point = function(x, y)
     this.normalized = function(factor=1) 
     {
         factor /= Math.max(Math.abs(this.x), Math.abs(this.y));
-        var x = this.x * factor;
-        var y = this.y * factor;
+        let x = this.x * factor;
+        let y = this.y * factor;
         
         return new CG.Point(x, y);
     }
@@ -34,7 +54,7 @@ CG.Point = function(x, y)
      */
     this.norm = function() 
     {
-        return Math.sqrt(x^2 + y^2);
+        return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
     }
 
     /**
@@ -60,6 +80,21 @@ CG.Point = function(x, y)
         return other === undefined ? undefined :
             this.x * other.x + this.y * other.y;
     }
+
+    /**
+     * O produto vetorial deste vetor com outro. Requer 3D. 
+     * @param {CG.point} other o outro vetor.
+     * @return {CG.Point} o vetor resultante do produto vetorial.
+     */
+    this.crossProduct = function(other) 
+    {
+        return other === undefined ? undefined : 
+            new CG.Point(
+                this.y*other.z - this.z*other.y,
+                this.z*other.x - this.x*other.z,
+                this.x*other.y - this.y*other.x
+            );
+    }
 }
 
 /**
@@ -76,8 +111,8 @@ CG.Line = function(p1, p2)
     this.dy = p2.y - p1.y;
     this.direction = new CG.Point(this.dx, this.dy);
 
-    var midpoint; 
-    var normals = new Array();
+    let midpoint; 
+    let normals = new Array();
 
     /**
      * Equação paramétrica da reta.
@@ -86,8 +121,8 @@ CG.Line = function(p1, p2)
      */
     this.parametricPoint = function(t) 
     {
-        var x = this.p1.x + this.dx * t;
-        var y = this.p1.y + this.dy * t;
+        const x = this.p1.x + this.dx * t;
+        const y = this.p1.y + this.dy * t;
         
         return new CG.Point(x, y);
     }
@@ -109,7 +144,7 @@ CG.Line = function(p1, p2)
      */
     this.normals = function(factor=1) 
     {
-        var n1, n2;
+        let n1, n2;
         if (normals.length < 2) 
         {
             n1 = new CG.Point(-this.dy, this.dx);
@@ -124,9 +159,48 @@ CG.Line = function(p1, p2)
     }
 }
 
+/**
+ * Gera um número randômico entre o início e o fim indicados.
+ * @param {number} start valor inicial do intervalo.
+ * @param {number} end valor final do intervalo.
+ */
 CG.Random = function(start, end) 
 {
     return Math.floor(Math.random() * end + start);
+}
+
+CG.translate = function(V, delta, neg=false) 
+{
+    if (Array.isArray(V))
+    {
+        let R = [];
+        for (v of V) 
+            R.push(CG.translate(v, delta, neg));
+        return R;
+    } else {
+        let d = Array.isArray(delta) ? new CG.Point(delta) : delta;
+        let f = neg ? -1 : 1;
+        return new CG.Point(V.x + f*d.x, V.y + f*d.y, V.z + f*d.z);
+    }
+}
+
+CG.rotate2d = function(V, theta) 
+{
+    if (Array.isArray(V))
+    {
+        let R = [];
+        for (v of V) 
+            R.push(CG.rotate2d(v, theta));
+        return R;
+    } else {
+        if (theta instanceof CG.Point) 
+            theta = Math.atan2(theta.y, theta.x); 
+        let s = Math.sin(theta);
+        let c = Math.cos(theta);
+        let x = c * V.x + s * V.y;
+        let y = -s * V.x + c * V.y;
+        return new CG.Point(x, y);
+    }
 }
 
 /**

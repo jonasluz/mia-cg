@@ -30,8 +30,7 @@
         <!-- Script de inicialização da página -->
         <script>
             // Inicialização JQueryUI 
-            $( function() 
-            {
+            $( () => {
                 var tooltips = $( "[title]" ).tooltip({
                     position: {
                         my: "left top",
@@ -41,15 +40,14 @@
                 });
                 $( "button" ).button();
             
-                $( "#inLines" ).keydown(function (e)           /* or keyup  */
-                {
+                $( "#inLines" ).keydown((e) => {
                     if (e.keyCode == 13) // 27=esc
                         $( e.ctrlKey ? "#clip" : "#submit").click();
                 });                
             } );
             // Inicialização pós-carregamento.
-            $( document ).ready(function() {
-                initInput();                // inicializa o datagrid de entrada.
+            $( document ).ready(() => {
+                INPUT.init();               // inicializa as rotinas de entrada.
                 CYRUSBECK.init();           // inicializa ambiente CYRUSBECK.
             });
         </script>
@@ -69,9 +67,9 @@
             </p>
             <div id="jsGrid"></div><hr />
             <button id="submit" class="ui-button ui-widget ui-corner-all" 
-                onclick="draw()">Desenhar</button>
+                onclick="INPUT.draw()">Desenhar</button>
             <button id="clip" class="ui-button ui-widget ui-corner-all" 
-                onclick="clip()">Recortar</button>
+                onclick="INPUT.clip()">Recortar</button>
         </div>
         <canvas id="canvas" width="800" height="600"></canvas>
     </body>
